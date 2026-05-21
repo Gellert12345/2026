@@ -1,0 +1,7 @@
+C:\Users\Info\Documents\Tóth Zoltán\film\film\obj\Debug\films.csproj.AssemblyReference.cache
+C:\Users\Info\Documents\Tóth Zoltán\film\film\obj\Debug\films.csproj.CoreCompileInputs.cache
+C:\Users\Info\Documents\Tóth Zoltán\film\film\bin\Debug\film.exe.config
+C:\Users\Info\Documents\Tóth Zoltán\film\film\bin\Debug\film.exe
+C:\Users\Info\Documents\Tóth Zoltán\film\film\bin\Debug\film.pdb
+C:\Users\Info\Documents\Tóth Zoltán\film\film\obj\Debug\film.exe
+C:\Users\Info\Documents\Tóth Zoltán\film\film\obj\Debug\film.pdb

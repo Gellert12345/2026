@@ -1,0 +1,5 @@
+Avatar	5	10	780	162	Cinema City	Budapest
+Batman	5	10	900	140	Etele Mozi	Budapest
+Titanic	5	11	840	195	Belvárosi Mozi	Győr
+Inception	5	11	960	148	Cinema City	Pécs
+Joker	5	12	1020	122	Sun City	Szeged

@@ -1,0 +1,2 @@
+C:\Users\Info\Documents\Tóth Zoltán\film\film\obj\Debug\film.csproj.AssemblyReference.cache
+C:\Users\Info\Documents\Tóth Zoltán\film\film\obj\Debug\film.csproj.CoreCompileInputs.cache
