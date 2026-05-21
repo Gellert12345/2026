@@ -1,0 +1,97 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.IO;
+
+namespace bufefeladat
+{
+    public class Rendeles
+    {
+        public string Vevo { get; set; }
+        public int Honap { get; set; }
+        public int Nap { get; set; }
+        public int Idopont { get; set; }
+        public int Osszeg { get; set; }
+        public string Etel { get; set; }
+        public string Pult { get; set; }
+
+        public Rendeles(string[] sor)
+        {
+            Vevo = sor[0];
+            Honap = int.Parse(sor[1]);
+            Nap = int.Parse(sor[2]);
+            Idopont = int.Parse(sor[3]);
+            Osszeg = int.Parse(sor[4]);
+            Etel = sor[5];
+            Pult = sor[6];
+        }
+
+        public override string ToString()
+        {
+            return $"{Vevo} {Honap} {Nap} {Idopont} {Osszeg} {Etel} {Pult}";
+        }
+    }
+
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            List<Rendeles> rendelesek = new List<Rendeles>();
+
+            string utvonal = @"C:\adatok\bufe.txt";
+
+            if (File.Exists(utvonal))
+            {
+                foreach (string sor in File.ReadLines(utvonal, Encoding.UTF8))
+                {
+                    rendelesek.Add(new Rendeles(sor.Trim().Split('\t')));
+                }
+            }
+
+            var rendezett = rendelesek.OrderBy(r => r.Nap).ThenBy(r => r.Idopont).ToList();
+
+            int minNap = rendezett.Min(r => r.Nap);
+            int maxNap = rendezett.Max(r => r.Nap);
+
+            for (int i = minNap; i <= maxNap; i++)
+            {
+                Console.WriteLine($"\ndecember {i}.:");
+
+                var napi = rendezett.Where(r => r.Nap == i).ToList();
+
+                for (int j = 0; j < napi.Count; j++)
+                {
+                    Console.WriteLine($"{j + 1}. {napi[j].Vevo} : {napi[j].Etel}");
+                }
+            }
+
+            Console.WriteLine("\nNapi bevétel:");
+
+            for (int i = minNap; i <= maxNap; i++)
+            {
+                int bevetel = rendezett.Where(r => r.Nap == i).Sum(r => r.Osszeg);
+
+                Console.WriteLine($"{i - minNap + 1}. nap: {bevetel} Ft");
+            }
+
+            Console.WriteLine("\nLegdrágább rendelés december 5-én:");
+
+            var otodike = rendezett.Where(r => r.Nap == 5).ToList();
+
+            if (otodike.Any())
+            {
+                int maxAr = otodike.Max(r => r.Osszeg);
+
+                var legdragabb = otodike.Where(r => r.Osszeg == maxAr);
+
+                foreach (var r in legdragabb)
+                {
+                    Console.WriteLine($"{r.Vevo} {r.Osszeg} Ft");
+                }
+            }
+
+            Console.ReadKey();
+        }
+    }
+}

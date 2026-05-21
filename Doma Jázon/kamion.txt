@@ -1,0 +1,97 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.IO;
+
+namespace kamion_feladat
+{
+    public class Szallitas
+    {
+        public string Sofor { get; set; }
+        public int Honap { get; set; }
+        public int Nap { get; set; }
+        public int IndulasPerc { get; set; }
+        public int TavKm { get; set; }
+        public string CelVaros { get; set; }
+        public string Rendszam { get; set; }
+
+        public Szallitas(string[] sor)
+        {
+            Sofor = sor[0];
+            Honap = int.Parse(sor[1]);
+            Nap = int.Parse(sor[2]);
+            IndulasPerc = int.Parse(sor[3]);
+            TavKm = int.Parse(sor[4]);
+            CelVaros = sor[5];
+            Rendszam = sor[6];
+        }
+
+        public override string ToString()
+        {
+            return $"{Sofor} {Honap} {Nap} {IndulasPerc} {TavKm} {CelVaros} {Rendszam}";
+        }
+    }
+
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            List<Szallitas> szallitasok = new List<Szallitas>();
+
+            string utvonal = @"C:\Users\domaj\Documents\suli\c# otthoni projekt 2\kamion";
+
+            if (File.Exists(utvonal))
+            {
+                foreach (string sor in File.ReadLines(utvonal, Encoding.UTF8))
+                {
+                    szallitasok.Add(new Szallitas(sor.Trim().Split('\t')));
+                }
+            }
+
+            var rendezett = szallitasok.OrderBy(s => s.Nap).ThenBy(s => s.IndulasPerc).ToList();
+
+            int minNap = rendezett.Min(s => s.Nap);
+            int maxNap = rendezett.Max(s => s.Nap);
+
+            for (int i = minNap; i <= maxNap; i++)
+            {
+                Console.WriteLine($"\noktóber {i}.:");
+
+                var napi = rendezett.Where(s => s.Nap == i).ToList();
+
+                for (int j = 0; j < napi.Count; j++)
+                {
+                    Console.WriteLine($"{j + 1}. {napi[j].Sofor} - {napi[j].CelVaros}");
+                }
+            }
+
+            Console.WriteLine("\nNapi összes kilométer:");
+
+            for (int i = minNap; i <= maxNap; i++)
+            {
+                int osszKm = rendezett.Where(s => s.Nap == i).Sum(s => s.TavKm);
+
+                Console.WriteLine($"{i - minNap + 1}. nap: {osszKm} km");
+            }
+
+            Console.WriteLine("\nLeghosszabb út október 8-án:");
+
+            var nyolcadika = rendezett.Where(s => s.Nap == 8).ToList();
+
+            if (nyolcadika.Any())
+            {
+                int maxKm = nyolcadika.Max(s => s.TavKm);
+
+                var leghosszabb = nyolcadika.Where(s => s.TavKm == maxKm);
+
+                foreach (var s in leghosszabb)
+                {
+                    Console.WriteLine($"{s.Sofor} {s.TavKm} km");
+                }
+            }
+
+            Console.ReadKey();
+        }
+    }
+}

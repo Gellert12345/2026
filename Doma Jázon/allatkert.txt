@@ -1,0 +1,97 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.IO;
+
+namespace allatkert
+{
+    public class Allat
+    {
+        public string Nev { get; set; }
+        public int Honap { get; set; }
+        public int Nap { get; set; }
+        public int EtetesPerc { get; set; }
+        public int Kor { get; set; }
+        public string Faj { get; set; }
+        public string Gondozó { get; set; }
+
+        public Allat(string[] sor)
+        {
+            Nev = sor[0];
+            Honap = int.Parse(sor[1]);
+            Nap = int.Parse(sor[2]);
+            EtetesPerc = int.Parse(sor[3]);
+            Kor = int.Parse(sor[4]);
+            Faj = sor[5];
+            Gondozó = sor[6];
+        }
+
+        public override string ToString()
+        {
+            return $"{Nev} {Honap} {Nap} {EtetesPerc} {Kor} {Faj} {Gondozó}";
+        }
+    }
+
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            List<Allat> allatok = new List<Allat>();
+
+            string utvonal = @"C:\adatok\allatok.txt";
+
+            if (File.Exists(utvonal))
+            {
+                foreach (string sor in File.ReadLines(utvonal, Encoding.UTF8))
+                {
+                    allatok.Add(new Allat(sor.Trim().Split('\t')));
+                }
+            }
+
+            var rendezett = allatok.OrderBy(a => a.Nap).ThenBy(a => a.EtetesPerc).ToList();
+
+            int minNap = rendezett.Min(a => a.Nap);
+            int maxNap = rendezett.Max(a => a.Nap);
+
+            for (int i = minNap; i <= maxNap; i++)
+            {
+                Console.WriteLine($"\njúnius {i}.:");
+
+                var napi = rendezett.Where(a => a.Nap == i).ToList();
+
+                for (int j = 0; j < napi.Count; j++)
+                {
+                    Console.WriteLine($"{j + 1}. {napi[j].Nev} : {napi[j].Faj}");
+                }
+            }
+
+            Console.WriteLine("\nNapi életkor összeg:");
+
+            for (int i = minNap; i <= maxNap; i++)
+            {
+                int osszKor = rendezett.Where(a => a.Nap == i).Sum(a => a.Kor);
+
+                Console.WriteLine($"{i - minNap + 1}. nap: {osszKor} év");
+            }
+
+            Console.WriteLine("\nLegidősebb állat június 4-én:");
+
+            var negyedike = rendezett.Where(a => a.Nap == 4).ToList();
+
+            if (negyedike.Any())
+            {
+                int maxKor = negyedike.Max(a => a.Kor);
+
+                var legidosebb = negyedike.Where(a => a.Kor == maxKor);
+
+                foreach (var a in legidosebb)
+                {
+                    Console.WriteLine($"{a.Nev} {a.Kor} év");
+                }
+            }
+
+            Console.ReadKey();
+        }
+    }
+}
