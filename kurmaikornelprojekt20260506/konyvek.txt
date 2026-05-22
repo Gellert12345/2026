@@ -1,0 +1,5 @@
+Egri csillagok	1966	500	Gardonyi	Magyar
+Harry Potter	1997	320	Rowling	Fantasy
+A kis herceg	1943	120	Saint-Exupery	Mese
+Az ember tragédiája	1861	200	Madach	Drama
+Pál utcai fiúk	1906	180	Molnar	Ifjusagi
